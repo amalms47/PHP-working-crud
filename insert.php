@@ -8,7 +8,29 @@ if(isset($_POST['submitbn'])=="save"){
 $name=$_POST['studname'];
 $email=$_POST['email'];
 
-$query="INSERT INTO students (name,email,photo) VALUES ('$name','$email','2')";
+
+$file=$_FILES['fileToUpload'];
+$filename=$_FILES['fileToUpload']['name'];
+$filetmp=$_FILES['fileToUpload']['tmp_name'];
+$filesize=$_FILES['fileToUpload']['size'];
+$fileerror=$_FILES['fileToUpload']['error'];
+$filetype=$_FILES['fileToUpload']['type'];
+
+$fileext=explode('.', $filename);
+$fileActualext=strtolower(end($fileext));
+
+$allowed=array('jpg','jpeg');
+
+if(in_array($fileActualext,$allowed)){
+
+
+	$filenewname=uniqid('',true).".".$fileActualext;
+	$filedestn='uploads/'.$filenewname;
+	move_uploaded_file($filetmp, $filedestn);
+
+
+$query="INSERT INTO students (name,email,photo) VALUES ('$name','$email','$filenewname')";
+
 
 if(mysqli_query($mysql,$query)){
 
@@ -17,6 +39,14 @@ if(mysqli_query($mysql,$query)){
 else{
 	$_SESSION['msg']="failed";
 }
+
+}
+else{
+
+
+	$_SESSION['msg']="upload failed";
+}
+
 header('Location: ../profile/students.php');
 }
 

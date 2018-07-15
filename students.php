@@ -30,12 +30,14 @@ unset($_SESSION['msg']);
 }
 	endif ?>
 
-<form action="../profile/insert.php" id="studform" method="post">
+<form action="../profile/insert.php" id="studform" method="post" enctype="multipart/form-data">
 	<input type="hidden" name="id" value="<?=$id;?>"> 
+
 	<label>Name:</label>
 	<input type="text" name="studname" value="<?=$name;?>" id="studname">
 	<label>Email</label>
 	<input type="text" name="email" id="email" value="<?=$email;?>">
+	 <input type="file" name="fileToUpload" id="fileToUpload">
 	<?php if($state==FALSE): ?>
 	<input type="submit" name="submitbn" value="save" id="submitbn">
 	<?php else: ?>
@@ -51,7 +53,7 @@ if(mysqli_num_rows($result)>0){
 
 	foreach ($result as $key => $value) {
 		?>
-		<div><?php echo $value['name'];?>-<?php echo $value['email'];?>-<a href="students.php?edit=<?php echo $value['id'];?>">Edit</a>-<a href="insert.php?id=<?php echo $value['id'];?>">Delete</a></div><?php
+		<div><img width="30px;" height="30px;" src="../profile/uploads/<?php echo $value['photo']?>"><?php echo $value['name'];?>-<?php echo $value['email'];?>-<a href="students.php?edit=<?php echo $value['id'];?>">Edit</a>-<a href="insert.php?id=<?php echo $value['id'];?>">Delete</a></div><?php
 	}
 }
 
